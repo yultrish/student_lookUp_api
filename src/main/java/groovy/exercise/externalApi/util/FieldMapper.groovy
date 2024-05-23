@@ -28,7 +28,6 @@ class FieldMapper {
             details.setStudentClass(externalResponse.getData().getCustomerSegment())
             response.setStudentDetails(details)
         }
-
         response
     }
     }
