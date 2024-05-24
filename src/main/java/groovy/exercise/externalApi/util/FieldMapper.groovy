@@ -7,28 +7,32 @@ import groovy.exercise.externalApi.models.StudentRequest
 import groovy.exercise.externalApi.models.StudentResponse
 
 class FieldMapper {
+
     static ExternalApiRequest mapToExternalApiRequest(StudentRequest request) {
-        new ExternalApiRequest(
+        return new ExternalApiRequest(
                 requestId: UUID.randomUUID().toString(),
-                serviceCode: request.getSchoolCode(),
-                reference: request.getStudentId()
+                serviceCode: request.schoolCode,
+                reference: request.studentId
         )
     }
 
     static StudentResponse mapToStudentResponse(ExternalAPiResponse externalResponse) {
         StudentResponse response = new StudentResponse()
-        response.setSuccess(externalResponse.isStatus())
-        response.setMessage(externalResponse.getMessage())
+        response.success = externalResponse.status
+        response.message = externalResponse.message
 
-        if (externalResponse.isStatus()) {
+        if (externalResponse.status) {
             StudentDetails details = new StudentDetails()
-            details.setStudentId(externalResponse.getData().getBillReference())
-            details.setStudentName(externalResponse.getData().getCustomerName())
-            details.setGender(externalResponse.getData().getDetails().getGender())
-            details.setStudentClass(externalResponse.getData().getCustomerSegment())
-            response.setStudentDetails(details)
+            details.studentId = externalResponse.data.billReference
+            details.studentName = externalResponse.data.customerName
+            details.gender = externalResponse.data.details?.Gender
+            details.studentClass = externalResponse.data.customerSegment
+            response.studentDetails = details
+        }else{
+            response.success = false
+            response.message = "Failed to retrieve details."
         }
-        response
-    }
-    }
 
+        return response
+    }
+}

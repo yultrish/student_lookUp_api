@@ -1,33 +1,24 @@
 package groovy.exercise.externalApi.models;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
 public class ExternalAPiResponse {
     private boolean status;
     private String message;
-    private Data data;
 
-    @Getter
-    @Setter
-    public static class Data {
-        private String billReference;
-        private String customerName;
-        private String customerSegment;
-        private Details details;
+    @JsonProperty("data")
+    private Map<String, Object> data = new HashMap<>();
+
+    @JsonAnySetter
+    public void setData(String key, Object value) {
+        this.data.put(key, value);
     }
-
-    @Getter
-    @Setter
-    public static class Details {
-        @JsonProperty("Gender")
-        private String gender;
-    }
-    }
-
-
-
-
+}
