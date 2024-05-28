@@ -18,21 +18,17 @@ class FieldMapper {
 
     static StudentResponse mapToStudentResponse(ExternalAPiResponse externalResponse) {
         StudentResponse response = new StudentResponse()
-        response.success = externalResponse.status
-        response.message = externalResponse.message
 
-        if (externalResponse.status) {
+        if (externalResponse != null) {
+            response.success = externalResponse.status
+            response.message = externalResponse.message
             StudentDetails details = new StudentDetails()
             details.studentId = externalResponse.data.billReference
             details.studentName = externalResponse.data.customerName
             details.gender = externalResponse.data.details?.Gender
-            details.studentClass = externalResponse.data.customerSegment
+            details.classs = externalResponse.data.customerSegment
             response.studentDetails = details
-        }else{
-            response.success = false
-            response.message = "Failed to retrieve details."
         }
-
         return response
     }
 }
